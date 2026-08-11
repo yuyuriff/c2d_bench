@@ -1,0 +1,96 @@
+import os
+import json
+import subprocess
+from pathlib import Path
+import shutil
+import requests
+
+AGENT_URL = os.getenv("AGENT_URL", "http://localhost:8000/generate")
+DATASET_FILE = os.getenv("DATASET_FILE", "/workspace/benchmark/datasets/run_001.jsonl")
+RUN_ID = os.getenv("RUN_ID", "run_001")
+REPOS_DIR = os.getenv("REPOS_DIR", "/workspace/repos")
+MODEL_ALIAS = os.getenv("MODEL_ALIAS", "")
+OUTPUT_DIR = os.path.join("/workspace/benchmark/agent_output", RUN_ID)
+RESULTS_FILE = os.path.join(OUTPUT_DIR, "run_001.jsonl")
+
+def load_dataset(path: Path):
+    cases = []
+    with open(path, "r", encoding="utf-8") as dataset_file:
+        for line in dataset_file:
+            line = line.strip()
+            if not line:
+                continue
+            cases.append(json.loads(line))
+
+    return cases
+
+def clone_repo(instance_id: str, repo_url: str) -> str:
+    os.makedirs(REPOS_DIR, exist_ok=True)
+    repo_path = Path(os.path.join(REPOS_DIR, instance_id))
+
+    if not repo_path.exists():
+        subprocess.run(["git", "clone", repo_url, str(repo_path)], check=True)
+
+    return str(repo_path)
+
+def save_to_md(instance_id: str, output_md: str) -> str:
+    filename = f"{instance_id}.md"
+    path = os.path.join(OUTPUT_DIR, filename)
+
+    with open(path, "w", encoding="utf-8") as md:
+        md.write(output_md)
+
+    return path
+
+def main():
+    cases = load_dataset(DATASET_FILE)
+
+    if os.path.exists(OUTPUT_DIR):
+        shutil.rmtree(OUTPUT_DIR)
+    os.makedirs(OUTPUT_DIR)
+
+    with open(RESULTS_FILE, "w", encoding="utf-8") as results_file:
+        for case in cases:
+            instance_id = case.get("instance_id", "unknown")
+            repo_url = case.get("repo_url")
+
+            try:
+                if not repo_url:
+                    raise RuntimeError(f"Repo url is missing in case {instance_id}")
+
+                repo_path = clone_repo(instance_id, repo_url)
+                request = {
+                    "instance_id": instance_id,
+                    "repo_path": repo_path,
+                    "llm_model_alias": MODEL_ALIAS,
+                }
+                response = requests.post(AGENT_URL, json=request)
+                if not response.ok:
+                    raise RuntimeError(f"Agent returned code {response.status_code}: {response.text}")
+
+                result = response.json()
+                output_md = result.get("output_md", "")
+                md = save_to_md(instance_id, output_md)
+
+                case_result = {
+                    "instance_id": instance_id,
+                    "repo_path": repo_path,
+                    "output_md_path": md,
+                    "status": "success",
+                }
+                results_file.write(json.dumps(case_result) + "\n")
+
+            except Exception as e:
+                error_record = {
+                    "instance_id": instance_id,
+                    "status": "error",
+                    "error": str(e),
+                }
+                results_file.write(json.dumps(error_record) + "\n")
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        raise SystemExit(1)
+    

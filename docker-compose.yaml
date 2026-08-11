@@ -1,0 +1,35 @@
+services:
+  api-agent:
+    build:
+      context: ./agent
+    container_name: api-agent
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./benchmark:/workspace/benchmark
+      - ./repos:/workspace/repos
+
+  runner:
+    build:
+      context: ./runner
+    container_name: runner
+    environment:
+      AGENT_URL: http://api-agent:8000/generate
+      DATASET_FILE: /workspace/benchmark/datasets/run_001.jsonl
+      RUN_ID: run_001
+    volumes:
+      - ./benchmark:/workspace/benchmark
+      - ./repos:/workspace/repos
+
+  evaluator:
+    build:
+      context: ./evaluator
+    container_name: evaluator
+    environment:
+      DATASET_FILE: /workspace/benchmark/datasets/run_001.jsonl
+      RUN_ID: run_001
+    depends_on:
+      runner:
+        condition: service_completed_successfully
+    volumes:
+      - ./benchmark:/workspace/benchmark
