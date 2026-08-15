@@ -7,6 +7,7 @@ RUN pip install --no-cache-dir --timeout 60 -r requirements.txt
 COPY main.py .
 COPY config.py .
 COPY agent.py .
+COPY tools.py .
 
 EXPOSE 8000
 

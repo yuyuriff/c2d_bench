@@ -1,7 +1,10 @@
 from openai import OpenAI
 
 import os
+import json
 from pathlib import Path
+
+from tools import TOOLS, execute_tool
 
 def get_default_prompt() -> str:
     with open("/workspace/config/prompts/default.md", "r", encoding="utf-8") as f:
@@ -36,12 +39,65 @@ def call_llm(repo_dir: Path, config: dict, max_chars_per_file: int = 15_000, pro
     ]
 
     model = config["model_name"]
+    max_turns = config["max_turns"] or 100
+
+    for _ in range(max_turns):
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            tools=TOOLS,
+            tool_choice="auto",
+            stream=False,
+            temperature=0.1,
+        )
+
+        message = response.choices[0].message.content
+        if not getattr(message, "tool_calls", None):
+            return message.content or "Something went wrong. Model did not produce any output"
+
+        messages.append(message)
+
+        for tool_call in message.tool_calls:
+            tool_name = tool_call.function.name
+            args = tool_call.function.arguments or "{}"
+
+        try:
+            args = json.loads(args)
+        except Exception:
+            args = {}
+
+        tool_result = ""
+        try:
+            tool_result = execute_tool(
+                repo_dir=repo_dir,
+                tool_name=tool_name,
+                arguments=args,
+                max_chars_per_file=max_chars_per_file,
+            )
+        except Exception as e:
+            tool_result = f"Error executing tool: {e}"
+
+        messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": tool_result,
+        })
+
+    messages.append({
+        "role": "system",
+        "content": (
+            "Turn limit reached. Now write the best possible documentation using gathered information"
+        )
+    })
+
     response = client.chat.completions.create(
         model=model,
         messages=messages,
+        tools=TOOLS,
+        tool_choice="none",
         stream=False,
-        temperature=0.1
+        temperature=0.1,
     )
 
-    message = response.choices[0].message.content
+    message = response.choices[0].message.content or "Something went wrong. Model did not produce any output"
     return message
