@@ -1,0 +1,812 @@
+{
+  "name": "Documentation Knowledge Graph",
+  "statistics": {
+    "total_nodes": 26,
+    "questions": 10,
+    "answers": 16,
+    "total_edges": 16,
+    "edge_types": {
+      "has_answer": 16
+    },
+    "root_nodes": 3,
+    "depth_distribution": {
+      "0": 3,
+      "1": 11,
+      "2": 10,
+      "3": 2
+    },
+    "avg_children_per_node": 0.8846153846153846,
+    "compression_ratio": "17407/28743 (39.4% saved)",
+    "total_code_snippets": 24,
+    "snippets_by_language": {
+      "unknown": 24
+    }
+  },
+  "nodes": {
+    "q_477816": {
+      "node_id": "q_477816",
+      "node_type": "question",
+      "body_preview": "eJxlUT1P5DAQ7fdXjFJchdcUKyEt2aArKPYkDgRI1LPOhBgS24wnhP33jMOdxEfhYp7Hz++jTs19T0yAekYMR/j1MkU5z4KhRW7zxwhdZJCeoEbombpd1YukrbUU1rN/9olaj+vIj7ZM9s/d9d8KmIZdFaKuEzNx1RS4ttiAi0EoCMgx0ba2qVnVSf93A+a8qwYMjybE...",
+      "body_length": 492,
+      "body_compressed": true,
+      "key_fragments": [
+        "org/wiki/JSON\" rel=\"noreferrer\">JSON</a> content type:</p>\n<pre class=\"lang-none prettyprint-override\"><code>application/json\napplication/x-javascript\ntext/javascript\ntext/x-javascript\ntext/x-json\n</c"
+      ],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "application/json\napplication/x-javascript\ntext/javascript\ntext/x-javascript\ntext/x-json",
+          "source": "question",
+          "node_id": "q_477816",
+          "snippet_index": 0
+        }
+      ],
+      "code_snippets_count": 1,
+      "url": "https://stackoverflow.com/questions/477816/which-json-content-type-do-i-use",
+      "score": 11654,
+      "depth": 0,
+      "parent_id": null,
+      "parent_type": null,
+      "title": "Which JSON content type do I use?",
+      "tags": [
+        "json",
+        "mime-types",
+        "content-type"
+      ],
+      "created_date": 1232897119,
+      "extraction_source": "API"
+    },
+    "a_477819": {
+      "node_id": "a_477819",
+      "node_type": "answer",
+      "body_preview": "eJyFVMFO3DAQvfMVo70Ah8S7CApCIS2qQAUJWhWqnp1kkph1bNd2NvA3/ZZ+WWe82wptV1SKo8T2zLw379mFK6+th9uHz/cQ8TmeF8KVe4XzWBa1bbCUzmlVy6isEU/Bmr1CpHnaR3v2ikrbevljtJF/XPnYI9zd3F3BgI2SEF8cQvu6AKgAuzNvEufAORps5agjoKFJ...",
+      "body_length": 852,
+      "body_compressed": true,
+      "key_fragments": [
+        "p=514\" rel=\"noreferrer\">Why you shouldn't use <code>text/html</code> for JSON</a></li>\n<li><a href=\"https://web",
+        "types\" rel=\"noreferrer\">A rather complete list of Mimetypes and what to use them for</a></li>\n<li><a href=\"http://www",
+        "org/assignments/media-types/application/\" rel=\"noreferrer\">The official mime type list at IANA</a> from @gnrfan's answer below</li>\n</ul>"
+      ],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "application/json",
+          "source": "answer",
+          "node_id": "a_477819",
+          "snippet_index": 0
+        },
+        {
+          "language": "unknown",
+          "code": "application/javascript",
+          "source": "answer",
+          "node_id": "a_477819",
+          "snippet_index": 1
+        }
+      ],
+      "code_snippets_count": 2,
+      "url": "",
+      "score": 11612,
+      "depth": 1,
+      "parent_id": "q_477816",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "q_2339374": {
+      "node_id": "q_2339374",
+      "node_type": "question",
+      "body_preview": "eJyFkcFOwzAMhu99Cmun7bJKHCHrEcQZxN1r3TYsiSMn7YCnx2krMSQkTq0j58/nzyY2z4AebIBA1AH3gJA8OgepFRsz5BEzXK0edDZFh5+AAV7enmA/U5tZwHoc6KAtedQUhF7Q03ptxAR30E+hzZZDejB1bKrKsGsq42xjYvM60hoArcaeCSKGoBx7z7N+UHgKHWQG...",
+      "body_length": 464,
+      "body_compressed": true,
+      "key_fragments": [
+        "<p>I am in need of a small script that will display an SVG (vector image) within a frame that has 2 functions;</p>\n\n<ol>\n<li><p>The image can be panned (moved around to look at different parts of\nthe ",
+        "</p></li>\n<li><p>The SVG image can be zoomed in and out on also simmilar to google\nmaps except there will be no need to load new imagery as the image\nis a vector"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/2339374/zooming-and-panning-svg-images-using-raphael-js-or-some-other-js-library",
+      "score": 24,
+      "depth": 1,
+      "parent_id": "a_477819",
+      "parent_type": "answer",
+      "title": "Zooming and panning svg images using raphael.js or some other js library",
+      "tags": [
+        "javascript",
+        "svg",
+        "raphael"
+      ],
+      "created_date": 1267156163,
+      "extraction_source": "jibbering.com"
+    },
+    "a_3816657": {
+      "node_id": "a_3816657",
+      "node_type": "answer",
+      "body_preview": "<p>Raphael is good, but not good enough. </p>\n\n<p>Check out this page: <a href=\"http://code.google.com/p/svgpan/\" rel=\"noreferrer\">http://code.google.com/p/svgpan/</a>. It does exactly what you asked ...",
+      "body_length": 209,
+      "body_compressed": false,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 20,
+      "depth": 2,
+      "parent_id": "q_2339374",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "q_4493594": {
+      "node_id": "q_4493594",
+      "node_type": "question",
+      "body_preview": "eJyNVE1v2zAMvedXED61QGuv3a1wPWwdMOTQ7NANOys2Y2uhRU2S42W/fpTjjxRth52CiE/ke3x6zm2xhkYdEBRYxz+xDNA3umygVx5aVSF0pkIHoUF4cKiCFuwDty0bD6RLNCXCxccQnN52QbO53rCJdXSlVnS52nAPa+i5o0rwe4TA0FliVUF7hJKr4ST+pjVzTZiW...",
+      "body_length": 780,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/4493594/hosting-a-project-on-code-google-with-an-creative-commons-licence",
+      "score": 1,
+      "depth": 2,
+      "parent_id": "a_3816657",
+      "parent_type": "answer",
+      "title": "Hosting a project on code.google with an Creative Commons licence",
+      "tags": [
+        "open-source",
+        "google-code"
+      ],
+      "created_date": 1292876821,
+      "extraction_source": "code.google"
+    },
+    "a_4493678": {
+      "node_id": "a_4493678",
+      "node_type": "answer",
+      "body_preview": "eJx1lMFu2zAQRO/9ioVzaAK4FtpDDoEiIEgaoJcUaPsDNLmSCJNcZZeyq7/vUnJSO00PtiVhMTP7NHQ9NPeMJvs9wj3FSEkgeIvJooBhhERZPxxNCBOMgg5aYrDkcAO/epw+6szrY8o9MhyId7JWmR3C0FMmvYmjeLsGR3aMmLIaUoLLvviAz1IkQJ/QgEloZIsb4u5q...",
+      "body_length": 840,
+      "body_compressed": true,
+      "key_fragments": [
+        "They're used for other works, like photos, music, documentation (hence its use on opensource",
+        "</p>\n</li>\n<li><p>No Discrimination Against Fields of Endeavor</p>\n<p>The license must not restrict anyone from making use of the program in a specific field of endeavor",
+        "For example, it may not restrict the program from being used in a business, or from being used for genetic research"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 2,
+      "depth": 3,
+      "parent_id": "q_4493594",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "a_13943017": {
+      "node_id": "a_13943017",
+      "node_type": "answer",
+      "body_preview": "eJzFkDFPAzEMhff+CutmeplYTtdj7gSCjc3t+ZqUJI4cX2n59bggKjp0YGKKFD+/7/n1ZVhPUDkRZ4JQoWqIEUJWEqpKYwdr2M9VYeI5j6DeNCGVSImyogbOwBM8YQa08StzMqXAMxaPFFt4+fJDOJCc4GQeOyjCe9rqHWxmvZCCDSjzvPMGNEp+63pXhsWiL0OP4IWm...",
+      "body_length": 356,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 17,
+      "depth": 2,
+      "parent_id": "q_2339374",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "a_2590013": {
+      "node_id": "a_2590013",
+      "node_type": "answer",
+      "body_preview": "eJx9UsFO4zAQvfcrRj2uIGYrBNrKREJoDyAVJFhpz0MyaUwdT7CnDf17xml3qUThkMv4zXtv3ovtS4vQRmqupq1IPzdmGIbCYcCC43IKkfzVNLACKEaK0/L2+v7aGiyhxaSvS5eEItUgLQE3jasceljcLn7Dn21P0HCEu6eHe1C0TRI5LEtbcU0l9r13FYrjYF4SB2vG...",
+      "body_length": 520,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 1828,
+      "depth": 1,
+      "parent_id": "q_477816",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "q_671118": {
+      "node_id": "q_671118",
+      "node_type": "question",
+      "body_preview": "<p>What exactly is RESTful programming?</p>\n\n",
+      "body_length": 45,
+      "body_compressed": false,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/671118/what-exactly-is-restful-programming",
+      "score": 4199,
+      "depth": 0,
+      "parent_id": null,
+      "parent_type": null,
+      "title": "What exactly is RESTful programming?",
+      "tags": [
+        "rest",
+        "http",
+        "architecture",
+        "definition"
+      ],
+      "created_date": 1237733139,
+      "extraction_source": "Architecture"
+    },
+    "a_671132": {
+      "node_id": "a_671132",
+      "node_type": "answer",
+      "body_preview": "eJzVWVFz2zYSfvevwPglyZwk2k7upuNRdeP2nLPbpPbE7vSh0weQXImoQYIFQNNsx/+9uwuSoiXKaR031/OLRQLYXex++y24mJeLOeSLD6dX1/MIfwjlhM9AVEUKVjeqWAlpk0x5SHxlpRalVUWiSg3CLHlmDfFMXOMPmctfab7PeFVsKt9N6KQuZULvpBeJVlB4J17G...",
+      "body_length": 3148,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "GET /\nAccept: application/json+userdb",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 0
+        },
+        {
+          "language": "unknown",
+          "code": "200 OK\nContent-Type: application/json+userdb\n\n{\n    \"version\": \"1.0\",\n    \"links\": [\n        {\n            \"href\": \"/user\",\n            \"rel\": \"list\",\n            \"method\": \"GET\"\n        },\n        {\n            \"href\": \"/user\",\n            \"rel\": \"create\",\n            \"method\": \"POST\"\n        }\n    ]\n}",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 1
+        },
+        {
+          "language": "unknown",
+          "code": "GET /user\nAccept: application/json+userdb",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 2
+        },
+        {
+          "language": "unknown",
+          "code": "200 OK\nContent-Type: application/json+userdb\n\n{\n    \"users\": [\n        {\n            \"id\": 1,\n            \"name\": \"Emil\",\n            \"country: \"Sweden\",\n            \"links\": [\n                {\n                    \"href\": \"/user/1\",\n                    \"rel\": \"self\",\n                    \"method\": \"GET\"\n                },\n                {\n                    \"href\": \"/user/1\",\n                    \"rel\": \"edit\",\n                    \"method\": \"PUT\"\n                },\n                {\n                    \"href\": \"/user/1\",\n                    \"rel\": \"delete\",\n                    \"method\": \"DELETE\"\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Adam\",\n            \"country: \"Scotland\",\n            \"links\": [\n                {\n                    \"href\": \"/user/2\",\n                    \"rel\": \"self\",\n                    \"method\": \"GET\"\n                },\n                {\n                    \"href\": \"/user/2\",\n                    \"rel\": \"edit\",\n                    \"method\": \"PUT\"\n                },\n                {\n                    \"href\": \"/user/2\",\n                    \"rel\": \"delete\",\n                    \"method\": \"DELETE\"\n                }\n            ]\n        }\n    ],\n    \"links\": [\n        {\n            \"href\": \"/user\",\n            \"rel\": \"create\",\n            \"method\": \"POST\"\n        }\n    ]\n}",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 3
+        },
+        {
+          "language": "unknown",
+          "code": "POST /user\nAccept: application/json+userdb\nContent-Type: application/json+userdb\n\n{\n    \"name\": \"Karl\",\n    \"country\": \"Austria\"\n}",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 4
+        },
+        {
+          "language": "unknown",
+          "code": "201 Created\nContent-Type: application/json+userdb\n\n{\n    \"user\": {\n        \"id\": 3,\n        \"name\": \"Karl\",\n        \"country\": \"Austria\",\n        \"links\": [\n            {\n                \"href\": \"/user/3\",\n                \"rel\": \"self\",\n                \"method\": \"GET\"\n            },\n            {\n                \"href\": \"/user/3\",\n                \"rel\": \"edit\",\n                \"method\": \"PUT\"\n            },\n            {\n                \"href\": \"/user/3\",\n                \"rel\": \"delete\",\n                \"method\": \"DELETE\"\n            }\n        ]\n    },\n    \"links\": {\n       \"href\": \"/user\",\n       \"rel\": \"list\",\n       \"method\": \"GET\"\n    }\n}",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 5
+        },
+        {
+          "language": "unknown",
+          "code": "PUT /user/1\nAccept: application/json+userdb\nContent-Type: application/json+userdb\n\n{\n    \"name\": \"Emil\",\n    \"country\": \"Bhutan\"\n}",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 6
+        },
+        {
+          "language": "unknown",
+          "code": "200 OK\nContent-Type: application/json+userdb\n\n{\n    \"user\": {\n        \"id\": 1,\n        \"name\": \"Emil\",\n        \"country\": \"Bhutan\",\n        \"links\": [\n            {\n                \"href\": \"/user/1\",\n                \"rel\": \"self\",\n                \"method\": \"GET\"\n            },\n            {\n                \"href\": \"/user/1\",\n                \"rel\": \"edit\",\n                \"method\": \"PUT\"\n            },\n            {\n                \"href\": \"/user/1\",\n                \"rel\": \"delete\",\n                \"method\": \"DELETE\"\n            }\n        ]\n    },\n    \"links\": {\n       \"href\": \"/user\",\n       \"rel\": \"list\",\n       \"method\": \"GET\"\n    }\n}",
+          "source": "answer",
+          "node_id": "a_671132",
+          "snippet_index": 7
+        }
+      ],
+      "code_snippets_count": 8,
+      "url": "",
+      "score": 3032,
+      "depth": 1,
+      "parent_id": "q_671118",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "q_145689": {
+      "node_id": "q_145689",
+      "node_type": "question",
+      "body_preview": "eJyNU81u2zAMvvcpiJxaoLDRa+B6GNAddthle4CAkRmbrSwJFJ00e/pRtpOgRQ+72JIl8vujm9S+UOY+QEJVkpABhWDKE3p/BiGPSh1ohLh/JacQhSmUT91cVjV7ae+arBJD3363Uh3Ing3CIHR43gyqaVvXFKoTv3GijrGK0tdlVy/QuxV6d+/imCZb7rIzFEcPm8Lg...",
+      "body_length": 676,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/145689/relational-database-design-patterns",
+      "score": 297,
+      "depth": 1,
+      "parent_id": "a_671132",
+      "parent_type": "answer",
+      "title": "Relational Database Design Patterns?",
+      "tags": [
+        "design-patterns",
+        "database-design",
+        "rdbms"
+      ],
+      "created_date": 1222601396,
+      "extraction_source": "martinfowler.com"
+    },
+    "a_145714": {
+      "node_id": "a_145714",
+      "node_type": "answer",
+      "body_preview": "eJylVF1vGjEQfO+vWPGSVqIcBBC0IkhpqqiRghol6cerz7dgtz7btfdyuv76rg2BREraSH3ihNezszOzXvjlrcKARxEElM79BG1hJQLxz7lrDQY+udEbK6gJCDcYNEaQwhisYCFABVyf9BSRf18UbdsORF120a1pIF1dJMBYcImQ5IK2m4+CRCkixoGi2vQgoDnpWccV...",
+      "body_length": 952,
+      "body_compressed": true,
+      "key_fragments": [
+        "com/dp/013011510X\" rel=\"noreferrer\">Modeling in Color With UML</a> provides an \"archetype\" driven process of entity modeling starting from the premise that there are 4 core archetypes of any object/da"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 175,
+      "depth": 2,
+      "parent_id": "q_145689",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "a_145843": {
+      "node_id": "a_145843",
+      "node_type": "answer",
+      "body_preview": "eJx9VdFu2zgQfL+v2KdLC1jJe2ukCFAEKOpegkuLoijugZbWFmuKq5KUXfXrO0tKRpLq+hIj0nJ2dmaWWvfXbznavafepMTBRzKB/UWiFOzRGudGCjxEs3VMUdyQrPh4ub7qr/9aL549l69oO1LDO+utHrok+tjyeIGKc/mau+tRhvUVflGauE5kPUlqOdBepFloeTMf...",
+      "body_length": 1144,
+      "body_compressed": true,
+      "key_fragments": [
+        "</p>\n<p>Relational design patterns include things like:</p>\n<ol>\n<li><p>One-to-Many relationships (master-detail, parent-child) relationships using a foreign key",
+        "</p>\n</li>\n<li><p>Mixed-use database",
+        "</p>\n</li>\n</ol>\n<p>Most folks who design databases can easily rattle off a half-dozen &quot;It's another one of those&quot;; these are design patterns that they use on a regular basis"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 51,
+      "depth": 2,
+      "parent_id": "q_145689",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "q_7412343": {
+      "node_id": "q_7412343",
+      "node_type": "question",
+      "body_preview": "<p>I want to create a PayPal functionality on android. I have created a  test sandbox account at developer.paypal.com</p>\n\n<p>I want to use this function in my coding:</p>\n\n<pre><code>PayPal pp = **Pa...",
+      "body_length": 445,
+      "body_compressed": false,
+      "key_fragments": [
+        "com</p>\n\n<p>I want to use this function in my coding:</p>\n\n<pre><code>PayPal pp = **PayPal",
+        "I have that error in project:</p>\n\n<blockquote>\n  <p>Authentication failed, button not enabled"
+      ],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "PayPal pp = **PayPal.initWithAppID(this, \"what should I write here\",PayPal.ENV_SANDBOX);",
+          "source": "question",
+          "node_id": "q_7412343",
+          "snippet_index": 0
+        }
+      ],
+      "code_snippets_count": 1,
+      "url": "https://stackoverflow.com/questions/7412343/what-is-my-appid-on-developer-paypal",
+      "score": 4,
+      "depth": 1,
+      "parent_id": "a_671132",
+      "parent_type": "answer",
+      "title": "what is my appID on developer.paypal",
+      "tags": [
+        "android",
+        "paypal"
+      ],
+      "created_date": 1315983048,
+      "extraction_source": "developer.paypal"
+    },
+    "a_7831604": {
+      "node_id": "a_7831604",
+      "node_type": "answer",
+      "body_preview": "<p>This is the solution for above question:-</p>\n\n<p><strong>Paypal pp = PayPal.initWithAppID(this, \"APP-80W284485P519543T\",PayPal.ENV_SANDBOX);</strong></p>\n\n<p>i resolved the problem by taking help ...",
+      "body_length": 273,
+      "body_compressed": false,
+      "key_fragments": [
+        "<p>This is the solution for above question:-</p>\n\n<p><strong>Paypal pp = PayPal",
+        "ENV_SANDBOX);</strong></p>\n\n<p>i resolved the problem by taking help from some paypal tutorial"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 3,
+      "depth": 2,
+      "parent_id": "q_7412343",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "a_29648972": {
+      "node_id": "a_29648972",
+      "node_type": "answer",
+      "body_preview": "eJy9Vdtu2zgQfe9XDLJAtwsEErLbYtGt4qJovdtLigaJ+mzQ5NgiQpEsSdnxWz+iX9gv6aEkK04QFOnLAgYscTgzZ86cGVV+9spSFVNwdj0TQTY6sUxdEIZi2hmuytFGUhjDiipBTeDV6VGTko//lCXbYquvtGelReHCusxv5QX7wJFtEkk7K8wi4okXKQgbVxyOKLA5...",
+      "body_length": 1112,
+      "body_compressed": true,
+      "key_fragments": [
+        "org/wiki/Representational_state_transfer\" rel=\"noreferrer\"><strong>REST (Representational State Transfer)</strong></a> advocates that web applications should use HTTP as it was <strong>originally envi",
+        "Lookups should use <a href=\"https://en",
+        "That is, issuing a request twice should be no different from issuing it once"
+      ],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "http://myserver.com/catalog/item/1729",
+          "source": "answer",
+          "node_id": "a_29648972",
+          "snippet_index": 0
+        },
+        {
+          "language": "unknown",
+          "code": "http://myserver.com/catalog?item=1729",
+          "source": "answer",
+          "node_id": "a_29648972",
+          "snippet_index": 1
+        },
+        {
+          "language": "unknown",
+          "code": "http://myserver.com/addToCart?cart=314159&item=1729",
+          "source": "answer",
+          "node_id": "a_29648972",
+          "snippet_index": 2
+        }
+      ],
+      "code_snippets_count": 3,
+      "url": "",
+      "score": 825,
+      "depth": 1,
+      "parent_id": "q_671118",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "q_1005073": {
+      "node_id": "q_1005073",
+      "node_type": "question",
+      "body_preview": "<p>I wanted to create a list of options for testing purposes. At first, I did this:</p>\n\n<pre><code>ArrayList&lt;String&gt; places = new ArrayList&lt;String&gt;();\nplaces.add(\"Buenos Aires\");\nplaces.a...",
+      "body_length": 490,
+      "body_compressed": false,
+      "key_fragments": [],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "ArrayList<String> places = new ArrayList<String>();\nplaces.add(\"Buenos Aires\");\nplaces.add(\"Córdoba\");\nplaces.add(\"La Plata\");",
+          "source": "question",
+          "node_id": "q_1005073",
+          "snippet_index": 0
+        },
+        {
+          "language": "unknown",
+          "code": "ArrayList<String> places = new ArrayList<String>(\n    Arrays.asList(\"Buenos Aires\", \"Córdoba\", \"La Plata\"));",
+          "source": "question",
+          "node_id": "q_1005073",
+          "snippet_index": 1
+        }
+      ],
+      "code_snippets_count": 2,
+      "url": "https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line",
+      "score": 3418,
+      "depth": 0,
+      "parent_id": null,
+      "parent_type": null,
+      "title": "Initialization of an ArrayList in one line",
+      "tags": [
+        "java",
+        "collections",
+        "arraylist",
+        "initialization"
+      ],
+      "created_date": 1245211820,
+      "extraction_source": "Arrays.asList"
+    },
+    "a_1005089": {
+      "node_id": "a_1005089",
+      "node_type": "answer",
+      "body_preview": "eJy1U8Fu2zAMvfcreAoSYHWAHRfPQ1bsMKBAB6z7AEZmbLWypElUXO+39gn7sVG2k7VLV/Syg22Zoh4f+Z5KX31m6F0yNewIou68oQB6D4NL0FMgYAd3KTLUpAzKv2bACAh7/UD1ZdQ/CErlaqqudeRyPS5huUsCq7mFLjHuDAEZ6shyXMEl1I5ixmnxMOJLZbSwDQGH...",
+      "body_length": 616,
+      "body_compressed": true,
+      "key_fragments": [
+        "</p>\n<p>To make a variable-size list that is a concrete <code>ArrayList</code> you can create an <code>ArrayList</code> from the fixed-size list:</p>\n<pre><code>ArrayList&lt;String&gt; places = new Ar",
+        "asList(&quot;Buenos Aires&quot;, &quot;Córdoba&quot;, &quot;La Plata&quot;));\n</code></pre>\n<p>And import the correct package:</p>\n<pre><code>import java"
+      ],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "List<String> places = Arrays.asList(\"Buenos Aires\", \"Córdoba\", \"La Plata\");",
+          "source": "answer",
+          "node_id": "a_1005089",
+          "snippet_index": 0
+        },
+        {
+          "language": "unknown",
+          "code": "List<String> places2 = Collections.singletonList(\"Buenos Aires\");",
+          "source": "answer",
+          "node_id": "a_1005089",
+          "snippet_index": 1
+        },
+        {
+          "language": "unknown",
+          "code": "ArrayList<String> places = new ArrayList<>(Arrays.asList(\"Buenos Aires\", \"Córdoba\", \"La Plata\"));",
+          "source": "answer",
+          "node_id": "a_1005089",
+          "snippet_index": 2
+        },
+        {
+          "language": "unknown",
+          "code": "import java.util.Arrays;",
+          "source": "answer",
+          "node_id": "a_1005089",
+          "snippet_index": 3
+        }
+      ],
+      "code_snippets_count": 4,
+      "url": "",
+      "score": 2788,
+      "depth": 1,
+      "parent_id": "q_1005073",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "q_26027396": {
+      "node_id": "q_26027396",
+      "node_type": "question",
+      "body_preview": "<p>Is there an advantage (or much of a difference) to using Arrays.asList(something) over Collections.singletonList(something) to make a list containing one item? The latter makes the returned list im...",
+      "body_length": 221,
+      "body_compressed": false,
+      "key_fragments": [
+        "<p>Is there an advantage (or much of a difference) to using Arrays"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/26027396/arrays-aslist-vs-collections-singletonlist",
+      "score": 183,
+      "depth": 1,
+      "parent_id": "a_1005089",
+      "parent_type": "answer",
+      "title": "Arrays.asList() vs Collections.singletonList()",
+      "tags": [
+        "java",
+        "collections"
+      ],
+      "created_date": 1411596646,
+      "extraction_source": "Collections.singletonList"
+    },
+    "a_26027480": {
+      "node_id": "a_26027480",
+      "node_type": "answer",
+      "body_preview": "eJytk8GO1DAMhu/7FD6CNHS092qkEeKAtBInHsBNPU3YNI7iZDvl6XHaTmc4IEBwS50/zvf/cdt4ag33dPrI3pPJjoM04sLgKXN4cZLfCY+UrZbet8dFCk6glZw4DCc3jiVj56k9bhWYLCVClSzic0o4S4Py614IF3elHsR9p+1UFd8UiWIioZCx0gFfAAMsbderIFuC...",
+      "body_length": 532,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 251,
+      "depth": 2,
+      "parent_id": "q_26027396",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "a_26039540": {
+      "node_id": "a_26039540",
+      "node_type": "answer",
+      "body_preview": "<p>I would just add that the singletonlist is not backed by an array and just has a reference to that one item. Presumably, it would take less memory and can be significant depending on the number of ...",
+      "body_length": 230,
+      "body_compressed": false,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 77,
+      "depth": 2,
+      "parent_id": "q_26027396",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "a_1005083": {
+      "node_id": "a_1005083",
+      "node_type": "answer",
+      "body_preview": "eJytVMFuE0EMvfcrrD20QUqTFg7QNo3U5gKoSEiAOCAO3l2nO83szDLjzWqp+u/Ys2lJaHojUqJ4xmP7PT971syvCm7R2n4MTfA55rYHrgiynCJn0KGYHowzbNCa35QuZ4UvaX4VAvY3JvJsmmwwMd3WxJUvofctdMEzjQEjGIbSUwTnGRxRqVGLQMgEKAfdJuZOOAfo...",
+      "body_length": 1000,
+      "body_compressed": true,
+      "key_fragments": [
+        "<p>Actually, probably the \"best\" way to initialize the <code>ArrayList</code> is the method you wrote, as it does not need to create a new <code>List</code> in any way:</p>\n\n<pre><code>ArrayList&lt;St"
+      ],
+      "code_snippets": [
+        {
+          "language": "unknown",
+          "code": "ArrayList<String> list = new ArrayList<String>();\nlist.add(\"A\");\nlist.add(\"B\");\nlist.add(\"C\");",
+          "source": "answer",
+          "node_id": "a_1005083",
+          "snippet_index": 0
+        },
+        {
+          "language": "unknown",
+          "code": "ArrayList<String> list = new ArrayList<String>() {{\n    add(\"A\");\n    add(\"B\");\n    add(\"C\");\n}};",
+          "source": "answer",
+          "node_id": "a_1005083",
+          "snippet_index": 1
+        },
+        {
+          "language": "unknown",
+          "code": "List<String> list = [\"A\", \"B\", \"C\"];",
+          "source": "answer",
+          "node_id": "a_1005083",
+          "snippet_index": 2
+        }
+      ],
+      "code_snippets_count": 3,
+      "url": "",
+      "score": 2240,
+      "depth": 1,
+      "parent_id": "q_1005073",
+      "parent_type": "question",
+      "is_accepted": true
+    },
+    "q_69799202": {
+      "node_id": "q_69799202",
+      "node_type": "question",
+      "body_preview": "eJytU82O0zAQvvcpRr1woXW3i/hTNiBxgsOKV3DiCXHreIw9SQinFW/B68GLMHF3SyuV3QuXKHE88/3MN0UouUWodd2isx4h2e8I5GE+7SgxtDqaUUcEm+DlC6gmxvT77kehQrkoQvkRDPlfdz8Z9p5GGNspl77/QJ7Ro4GgDVxtXx8KocKGpJf2BnTDGPPlxqIzQBGo...",
+      "body_length": 680,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/69799202/why-does-java8annotation-contened-use-128bytes-which-is-twice-cache-line-size",
+      "score": 2,
+      "depth": 1,
+      "parent_id": "a_1005083",
+      "parent_type": "answer",
+      "title": "why does java8&#39;annotation @Contened use 128bytes which is twice cache line size on most hardware",
+      "tags": [
+        "java",
+        "multithreading",
+        "false-sharing"
+      ],
+      "created_date": 1635781042,
+      "extraction_source": "mail.openjdk"
+    },
+    "a_69809538": {
+      "node_id": "a_69809538",
+      "node_type": "answer",
+      "body_preview": "eJx9U8GK1EAQvfsVxZwUJhMUEZFsQAUxgrgwqOfeTmW7l05X7K6eMHsSz36Sf+MH+AtWJzOZZVz3EgLd79Wr915XQ92AUTuESG6HLfR70OS7FC15uNpDQNVafw0dOUdj/uORQAW22mGsyqF+VCUnH2fraqgrBSZgd7EyzEN8VZbjOG4YtVFh2GjqyytLsbhOtsVSD6lQ...",
+      "body_length": 788,
+      "body_compressed": true,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 3,
+      "depth": 2,
+      "parent_id": "q_69799202",
+      "parent_type": "question",
+      "is_accepted": false
+    },
+    "q_2990598": {
+      "node_id": "q_2990598",
+      "node_type": "question",
+      "body_preview": "<p>If you ever visit dzone.com you'll notice that all the posts appear on 1 page only. When we scroll that page down, older posts will be added to the end of the page (and maybe some posts at the begi...",
+      "body_length": 455,
+      "body_compressed": false,
+      "key_fragments": [],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "https://stackoverflow.com/questions/2990598/how-to-display-a-very-long-page-like-dzone-com",
+      "score": 1,
+      "depth": 2,
+      "parent_id": "a_69809538",
+      "parent_type": "answer",
+      "title": "How to display a very long page like dzone.com?",
+      "tags": [
+        "javascript",
+        "jquery"
+      ],
+      "created_date": 1275922959,
+      "extraction_source": "dzone.com"
+    },
+    "a_2990615": {
+      "node_id": "a_2990615",
+      "node_type": "answer",
+      "body_preview": "<p>You need to handle the <code>scroll</code> event and load more data using AJAX.</p>\n",
+      "body_length": 87,
+      "body_compressed": false,
+      "key_fragments": [
+        "<p>You need to handle the <code>scroll</code> event and load more data using AJAX"
+      ],
+      "code_snippets": [],
+      "code_snippets_count": 0,
+      "url": "",
+      "score": 2,
+      "depth": 3,
+      "parent_id": "q_2990598",
+      "parent_type": "question",
+      "is_accepted": false
+    }
+  },
+  "edges": [
+    {
+      "from": "q_145689",
+      "to": "a_145843",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_26027396",
+      "to": "a_26027480",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_477816",
+      "to": "a_2590013",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_477816",
+      "to": "a_477819",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_2339374",
+      "to": "a_13943017",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_69799202",
+      "to": "a_69809538",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_671118",
+      "to": "a_29648972",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_2339374",
+      "to": "a_3816657",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_671118",
+      "to": "a_671132",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_26027396",
+      "to": "a_26039540",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_1005073",
+      "to": "a_1005089",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_145689",
+      "to": "a_145714",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_2990598",
+      "to": "a_2990615",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_1005073",
+      "to": "a_1005083",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_4493594",
+      "to": "a_4493678",
+      "type": "has_answer"
+    },
+    {
+      "from": "q_7412343",
+      "to": "a_7831604",
+      "type": "has_answer"
+    }
+  ],
+  "root_nodes": [
+    "q_477816",
+    "q_671118",
+    "q_1005073"
+  ]
+}

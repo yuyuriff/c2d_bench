@@ -1,4 +1,8 @@
+from fastmcp import Client
+
 from pathlib import Path
+import os
+import asyncio
 
 TOOLS = [
     {
@@ -43,7 +47,82 @@ TOOLS = [
                     }
                 },
                 "required": ["query"],
-                "additionalProperties": False
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_mcp_files",
+            "description": "List context files on the MCP server",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_mcp_file",
+            "description": "Read a context file from the MCP server by relative path",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Relative path of a context file"
+                    }
+                },
+                "required": ["path"],
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_mcp",
+            "description": "Search context on the MCP server",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Text to search for"
+                    }
+                },
+                "required": ["query"],
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_documentation_graphs",
+            "description": "List documentation knowledge graphs on the MCP server",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_documentation_graph",
+            "description": "Read a documentation knowledge graph in JSON format",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "project": {
+                        "type": "string",
+                        "description": "Project name"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "Relative path of a graph file"
+                    },
+                },
             }
         }
     },
@@ -137,6 +216,20 @@ def search_in_repo(repo_dir: Path, query: str, max_results: int = 20, max_chars:
 
     return joined or "<No matches>"
 
+def get_mcp_url() -> str:
+    return os.getenv("MCP_SERVER_URL", "http://mcp-server:9000/mcp/")
+
+async def call_mcp_client(tool_name: str, arguments: dict) -> str:
+    client = Client(get_mcp_url())
+    async with client:
+        result = await client.call_tool(tool_name, arguments, timeout=60)
+    return result
+
+def call_mcp_tool(tool_name: str, arguments: dict) -> str:
+    try:
+        return asyncio.run(call_mcp_client(tool_name, arguments))
+    except Exception as e:
+        return f"Error calling MCP server: {e}"
 
 def execute_tool(repo_dir: Path, tool_name: str, arguments: dict, max_chars_per_file: int = 15_000) -> str:
     if tool_name == "get_repo_tree":
@@ -149,6 +242,26 @@ def execute_tool(repo_dir: Path, tool_name: str, arguments: dict, max_chars_per_
     if tool_name == "search_text":
         query = arguments.get("query", "")
         return search_in_repo(repo_dir, query)
+
+    if tool_name == "list_mcp_files":
+        return call_mcp_tool("list_mcp_files", {})
+
+    if tool_name == "read_mcp_file":
+        path = arguments.get("path", "")
+        return call_mcp_tool("read_mcp_file", {"path": path})
+
+    if tool_name == "search_mcp":
+        query = arguments.get("query", "")
+        return call_mcp_tool("search_mcp", {"query": query})
+
+    if tool_name == "list_documentation_graphs":
+        return call_mcp_tool("list_documentation_graphs", {})
+
+    if tool_name == "read_documentation_graph":
+        return call_mcp_tool("read_documentation_graph", {
+            "project": arguments.get("project", ""),
+            "path": arguments.get("path", ""),
+        })
 
     return f"Unavailable tool: {tool_name}"
     
