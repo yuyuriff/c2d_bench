@@ -1,2 +1,8 @@
 .env
 .env.evaluator
+benchmark/reports/*
+!benchmark/reports/.gitkeep
+benchmark/agent_output/*
+!benchmark/agent_output/.gitkeep
+benchmark/logs/*
+!benchmark/logs/.gitkeep

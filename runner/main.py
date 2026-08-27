@@ -3,6 +3,8 @@ import json
 import subprocess
 from pathlib import Path
 import shutil
+import logging
+
 import requests
 
 AGENT_URL = os.getenv("AGENT_URL", "http://localhost:8000/generate")
@@ -12,6 +14,19 @@ REPOS_DIR = os.getenv("REPOS_DIR", "/workspace/repos")
 MODEL_ALIAS = os.getenv("MODEL_ALIAS", "")
 OUTPUT_DIR = os.path.join("/workspace/benchmark/agent_output", RUN_ID)
 RESULTS_FILE = os.path.join(OUTPUT_DIR, "run_001.jsonl")
+
+LOG_DIR = "/workspace/benchmark/logs"
+LOG_FILE = os.path.join(LOG_DIR, f"{Path(DATASET_FILE).stem}.log")
+
+def setup_logging():
+    os.makedirs(LOG_DIR, exist_ok=True)
+    logging.basicConfig(
+        filename=LOG_FILE,
+        filemode="w",
+    )
+    return logging.getLogger("runner")
+
+logger = setup_logging()
 
 def load_dataset(path: Path):
     cases = []
@@ -24,12 +39,15 @@ def load_dataset(path: Path):
 
     return cases
 
-def clone_repo(instance_id: str, repo_url: str) -> str:
+def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
     os.makedirs(REPOS_DIR, exist_ok=True)
     repo_path = Path(os.path.join(REPOS_DIR, instance_id))
 
-    if not repo_path.exists():
+    if not repo_path.exists() or update:
+        logger.info("Cloning %s to %s", repo_url, repo_path)
         subprocess.run(["git", "clone", repo_url, str(repo_path)], check=True)
+    else:
+        logger.info("Repo already exists at: %s", repo_path)
 
     return str(repo_path)
 
@@ -43,16 +61,25 @@ def save_to_md(instance_id: str, output_md: str) -> str:
     return path
 
 def main():
-    cases = load_dataset(DATASET_FILE)
+    logger.info(
+        "Benchmark run started: run_id=%s dataset=%s results=%s logs=%s",
+        RUN_ID, DATASET_FILE, RESULTS_FILE, LOG_FILE,
+    )
 
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
 
+    cases = load_dataset(DATASET_FILE)
+    logger.info("Loaded %s cases", len(cases))
+    logger.info("Using %s model", MODEL_ALIAS)
+
     with open(RESULTS_FILE, "w", encoding="utf-8") as results_file:
         for case in cases:
             instance_id = case.get("instance_id", "unknown")
             repo_url = case.get("repo_url")
+
+            logger.info("Processing instance: %s", instance_id)
 
             try:
                 if not repo_url:
@@ -79,8 +106,10 @@ def main():
                     "status": "success",
                 }
                 results_file.write(json.dumps(case_result) + "\n")
+                logger.info("Instance processed: %s", instance_id)
 
             except Exception as e:
+                logger.exception("Instance failed: %s", instance_id)
                 error_record = {
                     "instance_id": instance_id,
                     "status": "error",
@@ -88,9 +117,13 @@ def main():
                 }
                 results_file.write(json.dumps(error_record) + "\n")
 
+    logger.info("Benchmark run finished. Results: %s", RESULTS_FILE)
+
+
 if __name__ == "__main__":
     try:
         main()
     except Exception:
+        logger.exception("Benchmark run failed")
         raise SystemExit(1)
     

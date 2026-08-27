@@ -1,13 +1,41 @@
 services:
+  mcp-server:
+    build:
+      context: ./mcp
+    container_name: mcp-server
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./mcp/data:/workspace/mcp-data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('localhost', 9000), timeout=3); s.close()"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+
   api-agent:
     build:
       context: ./agent
     container_name: api-agent
+    env_file:
+      - .env
+    environment:
+      MCP_SERVER_URL: http://mcp-server:9000/mcp/
     ports:
       - "8000:8000"
     volumes:
       - ./benchmark:/workspace/benchmark
       - ./repos:/workspace/repos
+      - ./config:/workspace/config
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
 
   runner:
     build:
@@ -17,14 +45,21 @@ services:
       AGENT_URL: http://api-agent:8000/generate
       DATASET_FILE: /workspace/benchmark/datasets/run_001.jsonl
       RUN_ID: run_001
+      MODEL_ALIAS: deepseek-chat
+    depends_on:
+      api-agent:
+        condition: service_healthy
     volumes:
       - ./benchmark:/workspace/benchmark
       - ./repos:/workspace/repos
+      - ./config:/workspace/config
 
   evaluator:
     build:
       context: ./evaluator
     container_name: evaluator
+    env_file:
+      - .env.evaluator
     environment:
       DATASET_FILE: /workspace/benchmark/datasets/run_001.jsonl
       RUN_ID: run_001
@@ -33,3 +68,4 @@ services:
         condition: service_completed_successfully
     volumes:
       - ./benchmark:/workspace/benchmark
+      - ./config:/workspace/config

@@ -2,7 +2,7 @@ import os
 
 from openai import OpenAI
 from deepeval.metrics import GEval
-from deepeval.test_case import LLMTestCase, LLMTsetCaseParams
+from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 
 JUDGE_API_KEY = os.getenv("JUDGE_API_KEY")
 JUDGE_BASE_URL = os.getenv("JUDGE_BASE_URL")

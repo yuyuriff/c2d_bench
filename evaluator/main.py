@@ -98,7 +98,7 @@ def main():
         "details": details,
     }
     with open(REPORT_FILE, "w", encoding="utf-8") as report_file:
-        json.dump(report, report_file)
+        json.dump(report, report_file, indent=2)
 
 
 if __name__ == "__main__":

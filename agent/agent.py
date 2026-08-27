@@ -6,8 +6,11 @@ from pathlib import Path
 
 from tools import TOOLS, execute_tool
 
+CONFIG_DIR = Path("/workspace/config")
+
 def get_default_prompt() -> str:
-    with open("/workspace/config/prompts/default.md", "r", encoding="utf-8") as f:
+    prompt_dir = CONFIG_DIR / "prompts/default.md"
+    with prompt_dir.open("r", encoding="utf-8") as f:
         return f.read()
 
 def get_client(config: dict) -> OpenAI:
@@ -39,7 +42,7 @@ def call_llm(repo_dir: Path, config: dict, max_chars_per_file: int = 15_000, pro
     ]
 
     model = config["model_name"]
-    max_turns = config["max_turns"] or 100
+    max_turns = config.get("max_turns") or 100
 
     for _ in range(max_turns):
         response = client.chat.completions.create(
@@ -51,37 +54,37 @@ def call_llm(repo_dir: Path, config: dict, max_chars_per_file: int = 15_000, pro
             temperature=0.1,
         )
 
-        message = response.choices[0].message.content
+        message = response.choices[0].message
         if not getattr(message, "tool_calls", None):
             return message.content or "Something went wrong. Model did not produce any output"
 
-        messages.append(message)
+        messages.append(message.model_dump())
 
         for tool_call in message.tool_calls:
             tool_name = tool_call.function.name
             args = tool_call.function.arguments or "{}"
 
-        try:
-            args = json.loads(args)
-        except Exception:
-            args = {}
+            try:
+                args = json.loads(args)
+            except Exception:
+                args = {}
 
-        tool_result = ""
-        try:
-            tool_result = execute_tool(
-                repo_dir=repo_dir,
-                tool_name=tool_name,
-                arguments=args,
-                max_chars_per_file=max_chars_per_file,
-            )
-        except Exception as e:
-            tool_result = f"Error executing tool: {e}"
+            tool_result = ""
+            try:
+                tool_result = execute_tool(
+                    repo_dir=repo_dir,
+                    tool_name=tool_name,
+                    arguments=args,
+                    max_chars_per_file=max_chars_per_file,
+                )
+            except Exception as e:
+                tool_result = f"Error executing tool: {e}"
 
-        messages.append({
-                "role": "tool",
-                "tool_call_id": tool_call.id,
-                "content": tool_result,
-        })
+            messages.append({
+                    "role": "tool",
+                    "tool_call_id": tool_call.id,
+                    "content": tool_result,
+            })
 
     messages.append({
         "role": "system",
