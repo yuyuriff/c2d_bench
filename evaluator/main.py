@@ -1,15 +1,34 @@
 import json
 import os
+import logging
 from pathlib import Path
 
 from evaluate import evaluate
 
-DATASET_FILE = os.getenv("DATASET_FILE", "/workspace/benchmark/datasets/run_001.jsonl")
-RUN_ID = os.getenv("RUN_ID", "run_001")
-OUTPUT_DIR = os.path.join("/workspace/benchmark/agent_output", RUN_ID)
-RESULTS_FILE = os.path.join(OUTPUT_DIR, "run_001.jsonl")
-REPORT_DIR = os.path.join("/workspace/benchmark/reports", RUN_ID)
-REPORT_FILE = os.path.join(REPORT_DIR, "run_001.json")
+DATASET_DIR = "/workspace/benchmark/datasets/"
+DATASET_FILE_ENV = os.getenv("DATASET_FILE", "run_001.jsonl")
+DATASET_FILE = DATASET_DIR + DATASET_FILE_ENV
+
+RUN_ID = os.getenv("RUN_ID", "001")
+RUN_NAME = f"run_{RUN_ID}"
+
+OUTPUT_DIR = os.path.join("/workspace/benchmark/agent_output", RUN_NAME)
+RESULTS_FILE = os.path.join(OUTPUT_DIR, f"{RUN_NAME}.jsonl")
+REPORT_DIR = os.path.join("/workspace/benchmark/reports", RUN_NAME)
+REPORT_FILE = os.path.join(REPORT_DIR, f"{RUN_NAME}.json")
+
+LOG_DIR = "/workspace/benchmark/logs"
+LOG_FILE = os.path.join(LOG_DIR, f"{RUN_NAME}.log")
+
+def setup_logging():
+    os.makedirs(LOG_DIR, exist_ok=True)
+    logging.basicConfig(
+        filename=LOG_FILE,
+        filemode="w",
+    )
+    return logging.getLogger("evaluator")
+
+logger = setup_logging()
 
 def load_jsonl(path):
     rows = []
@@ -34,6 +53,10 @@ def get_gold_dict(dataset) -> dict[str, str]:
 
 def main():
     os.makedirs(REPORT_DIR, exist_ok=True)
+    logger.info(
+        "Evaluator run started: run_id=%s dataset=%s results=%s report=%s",
+        RUN_NAME, DATASET_FILE, RESULTS_FILE, REPORT_FILE,
+    )
 
     dataset = load_jsonl(DATASET_FILE)
     results = load_jsonl(RESULTS_FILE)
@@ -74,6 +97,7 @@ def main():
 
         if status == "success" and output_exists and gold_exists:
             try:
+                logger.info("Evaluating instance: %s", instance_id)
                 eval_result = evaluate(
                     instance_id=instance_id,
                     gold_doc=gold_doc,
@@ -85,6 +109,7 @@ def main():
 
             except Exception as e:
                 detail["judge_error"] = str(e)
+                logger.exception("Evaluation error on case %s", instance_id)
 
         details.append(detail)
 
@@ -105,4 +130,5 @@ if __name__ == "__main__":
     try:
         main()
     except Exception:
+        logger.exception("Evaluation failed")
         raise SystemExit(1)

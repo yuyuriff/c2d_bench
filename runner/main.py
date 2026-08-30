@@ -8,21 +8,36 @@ import logging
 import requests
 
 AGENT_URL = os.getenv("AGENT_URL", "http://localhost:8000/generate")
-DATASET_FILE = os.getenv("DATASET_FILE", "/workspace/benchmark/datasets/run_001.jsonl")
-RUN_ID = os.getenv("RUN_ID", "run_001")
-REPOS_DIR = os.getenv("REPOS_DIR", "/workspace/repos")
+
+DATASET_DIR = "/workspace/benchmark/datasets"
+DATASET_FILE_ENV = os.getenv("DATASET_FILE", "run_001.jsonl")
+DATASET_FILE =  os.path.join(DATASET_DIR, DATASET_FILE_ENV)
+
+RUN_ID = os.getenv("RUN_ID", "001")
+RUN_NAME = f"run_{RUN_ID}"
 MODEL_ALIAS = os.getenv("MODEL_ALIAS", "")
-OUTPUT_DIR = os.path.join("/workspace/benchmark/agent_output", RUN_ID)
-RESULTS_FILE = os.path.join(OUTPUT_DIR, "run_001.jsonl")
+
+REPOS_DIR = "/workspace/repos"
+OUTPUT_DIR = os.path.join("/workspace/benchmark/agent_output", RUN_NAME)
+RESULTS_FILE = os.path.join(OUTPUT_DIR, f"{RUN_NAME}.jsonl")
 
 LOG_DIR = "/workspace/benchmark/logs"
-LOG_FILE = os.path.join(LOG_DIR, f"{Path(DATASET_FILE).stem}.log")
+LOG_FILE = os.path.join(LOG_DIR, f"{RUN_NAME}.log")
+
+UPDATE = os.getenv("UPDATE", "false")
+
+def get_update() -> bool:
+    if UPDATE == "true":
+        return True
+    return False
 
 def setup_logging():
     os.makedirs(LOG_DIR, exist_ok=True)
     logging.basicConfig(
         filename=LOG_FILE,
         filemode="w",
+        level=logging.INFO,
+        force=True,
     )
     return logging.getLogger("runner")
 
@@ -60,10 +75,16 @@ def save_to_md(instance_id: str, output_md: str) -> str:
 
     return path
 
+def log_tool_stats(instance_id: str, stats : dict):
+    calls = stats.pop("tool_calls", [])
+    logger.info("Tool call stats for instance %s: %s", instance_id, json.dumps(stats))
+    for call in calls:
+        logger.info("Tool call: %s", json.dumps(call))
+
 def main():
     logger.info(
         "Benchmark run started: run_id=%s dataset=%s results=%s logs=%s",
-        RUN_ID, DATASET_FILE, RESULTS_FILE, LOG_FILE,
+        RUN_NAME, DATASET_FILE_ENV, RESULTS_FILE, LOG_FILE,
     )
 
     if os.path.exists(OUTPUT_DIR):
@@ -85,7 +106,7 @@ def main():
                 if not repo_url:
                     raise RuntimeError(f"Repo url is missing in case {instance_id}")
 
-                repo_path = clone_repo(instance_id, repo_url)
+                repo_path = clone_repo(instance_id=instance_id, repo_url=repo_url, update=get_update())
                 request = {
                     "instance_id": instance_id,
                     "repo_path": repo_path,
@@ -97,6 +118,9 @@ def main():
 
                 result = response.json()
                 output_md = result.get("output_md", "")
+                tool_call_stats = result.get("tool_call_stats", {})
+
+                log_tool_stats(instance_id, tool_call_stats)
                 md = save_to_md(instance_id, output_md)
 
                 case_result = {

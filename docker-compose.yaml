@@ -43,9 +43,10 @@ services:
     container_name: runner
     environment:
       AGENT_URL: http://api-agent:8000/generate
-      DATASET_FILE: /workspace/benchmark/datasets/run_001.jsonl
-      RUN_ID: run_001
-      MODEL_ALIAS: deepseek-chat
+      DATASET_FILE: ${DATASET_FILE}
+      RUN_ID: ${RUN_ID}
+      MODEL_ALIAS: ${MODEL_ALIAS}
+      UPDATE: ${UPDATE}
     depends_on:
       api-agent:
         condition: service_healthy
@@ -61,8 +62,8 @@ services:
     env_file:
       - .env.evaluator
     environment:
-      DATASET_FILE: /workspace/benchmark/datasets/run_001.jsonl
-      RUN_ID: run_001
+      DATASET_FILE: ${DATASET_FILE}
+      RUN_ID: ${RUN_ID}
     depends_on:
       runner:
         condition: service_completed_successfully

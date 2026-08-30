@@ -1,0 +1,19 @@
+{
+  "agent": {
+    "max_chars_per_file": 15000,
+    "max_turns": 50,
+    "max_tool_calls": 30,
+    "model_timeout": 120,
+    "mcp_timeout": 30
+  },
+  "models": {
+    "deepseek-chat": {
+      "max_turns": 100,
+      "max_tool_calls": 100
+    },
+    "deepseek-reasoner": {
+      "max_turns": 100,
+      "max_tool_calls": 100
+    }
+  }
+}

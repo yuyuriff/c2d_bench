@@ -1,6 +1,5 @@
 import os
 
-from openai import OpenAI
 from deepeval.metrics import GEval
 from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 
@@ -8,21 +7,9 @@ JUDGE_API_KEY = os.getenv("JUDGE_API_KEY")
 JUDGE_BASE_URL = os.getenv("JUDGE_BASE_URL")
 JUDGE_MODEL = os.getenv("JUDGE_MODEL")
 
-# default for deepeval
-os.environ.setdefault("OPENAI_API_KEY", JUDGE_API_KEY)
-os.environ.setdefault("OPENAI_BASE_URL", JUDGE_BASE_URL)
-
-def get_client() -> OpenAI:
-    if not JUDGE_API_KEY:
-        raise RuntimeError("JUDGE_API_KEY is not set")
-    if not JUDGE_BASE_URL:
-        raise RuntimeError("JUDGE_BASE_URL is not set")
-    if not JUDGE_MODEL:
-        raise RuntimeError("JUDGE_MODEL is not set")
-    return OpenAI(
-        api_key=JUDGE_API_KEY,
-        base_url=JUDGE_BASE_URL,
-    )
+# used by deepeval
+os.environ["OPENAI_API_KEY"] = JUDGE_API_KEY
+os.environ["OPENAI_BASE_URL"] = JUDGE_BASE_URL
 
 def build_metrics(model: str | None = None):
     return [
@@ -63,6 +50,15 @@ def build_metrics(model: str | None = None):
     ]
 
 def evaluate(instance_id: str, gold_doc: str, generated_doc: str) -> dict:
+    if not JUDGE_API_KEY:
+        raise RuntimeError("JUDGE_API_KEY is not set")
+
+    if not JUDGE_BASE_URL:
+        raise RuntimeError("JUDGE_BASE_URL is not set")
+
+    if not JUDGE_MODEL:
+        raise RuntimeError("JUDGE_MODEL is not set")
+
     test_case = LLMTestCase(
         input=f"Generate technical documentation for instance {instance_id}",
         actual_output=generated_doc,
