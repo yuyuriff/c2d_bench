@@ -14,7 +14,7 @@ def get_default_prompt() -> str:
     with prompt_dir.open("r", encoding="utf-8") as f:
         return f.read()
 
-def get_client(config: dict) -> OpenAI:
+def get_client(config: dict, model_timeout: int) -> OpenAI:
     api_key = os.environ.get(config["api_key_env"])
     base_url = config["base_url"]
 
@@ -26,11 +26,14 @@ def get_client(config: dict) -> OpenAI:
     return OpenAI(
         api_key=api_key,
         base_url=base_url,
+        timeout=model_timeout,
     )
 
-def call_llm(repo_dir: Path, config: dict, max_chars_per_file: int = 15_000,
-             prompt: str | None = None, instance_id: str = "") -> tuple[str, dict]:
-    client = get_client(config)
+def call_llm(repo_dir: Path, config: dict, prompt: str | None = None, instance_id: str = "") -> tuple[str, dict]:
+    model = config["model_name"]
+    limits = get_agent_limits(config)
+    timeout = limits["model_timeout"]
+    client = get_client(config, timeout)
 
     messages = [
         {
@@ -43,8 +46,7 @@ def call_llm(repo_dir: Path, config: dict, max_chars_per_file: int = 15_000,
         }
     ]
 
-    model = config["model_name"]
-    limits = get_agent_limits()
+    max_chars_per_file = limits["max_chars_per_file"]
     max_turns = limits["max_turns"]
     max_tool_calls = limits["max_tool_calls"]
 

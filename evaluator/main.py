@@ -7,7 +7,7 @@ from evaluate import evaluate
 
 DATASET_DIR = "/workspace/benchmark/datasets/"
 DATASET_FILE_ENV = os.getenv("DATASET_FILE", "run_001.jsonl")
-DATASET_FILE = DATASET_DIR + DATASET_FILE_ENV
+DATASET_FILE = os.path.join(DATASET_DIR, DATASET_FILE_ENV)
 
 RUN_ID = os.getenv("RUN_ID", "001")
 RUN_NAME = f"run_{RUN_ID}"
@@ -25,6 +25,7 @@ def setup_logging():
     logging.basicConfig(
         filename=LOG_FILE,
         filemode="w",
+        level=logging.INFO,
     )
     return logging.getLogger("evaluator")
 

@@ -61,6 +61,7 @@ def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
     if not repo_path.exists() or update:
         logger.info("Cloning %s to %s", repo_url, repo_path)
         subprocess.run(["git", "clone", repo_url, str(repo_path)], check=True)
+        logger.info("Repo cloned successfully")
     else:
         logger.info("Repo already exists at: %s", repo_path)
 

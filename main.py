@@ -18,7 +18,7 @@ env["DATASET_FILE"] = args.dataset_file
 env["UPDATE"] = str(args.update_repo).lower()
 
 result = subprocess.run(
-    ["docker", "compose", "up", "--abort-on-container-exit", "--exit-code-from", "evaluator"],
+    ["docker", "compose", "up", "--build", "--exit-code-from", "evaluator"],
     env=env,
 )
 

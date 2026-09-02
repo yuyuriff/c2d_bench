@@ -147,7 +147,7 @@ def resolve_rel_path(repo_dir: Path, rel_path: str) -> Path:
 
     return repo_path
 
-def get_repo_tree(repo_dir: Path, max_nodes: int = 500) -> str:
+def get_repo_tree(repo_dir: Path, max_nodes: int = 100) -> str:
     nodes = []
 
     for path in repo_dir.rglob("*"):
@@ -160,7 +160,7 @@ def get_repo_tree(repo_dir: Path, max_nodes: int = 500) -> str:
     return "\n".join(nodes)
 
 
-def read_repo_file(repo_dir: Path, rel_path: str, max_chars: int) -> str:
+def read_repo_file(repo_dir: Path, rel_path: str, max_chars: int = 15_000) -> str:
     path = resolve_rel_path(repo_dir, rel_path)
 
     if not path.exists():
