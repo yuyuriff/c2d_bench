@@ -8,6 +8,8 @@ COPY main.py .
 COPY config.py .
 COPY agent.py .
 COPY tools.py .
+COPY mcp.py .
+COPY __init__.py .
 
 EXPOSE 8000
 

@@ -27,9 +27,7 @@ LOG_FILE = os.path.join(LOG_DIR, f"{RUN_NAME}.log")
 UPDATE = os.getenv("UPDATE", "false")
 
 def get_update() -> bool:
-    if UPDATE == "true":
-        return True
-    return False
+    return UPDATE.lower() == "true"
 
 def setup_logging():
     os.makedirs(LOG_DIR, exist_ok=True)
@@ -58,6 +56,9 @@ def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
     os.makedirs(REPOS_DIR, exist_ok=True)
     repo_path = Path(os.path.join(REPOS_DIR, instance_id))
 
+    if update and repo_path.exists():
+        shutil.rmtree(repo_path)
+        
     if not repo_path.exists() or update:
         logger.info("Cloning %s to %s", repo_url, repo_path)
         subprocess.run(["git", "clone", repo_url, str(repo_path)], check=True)

@@ -1,8 +1,6 @@
-from fastmcp import Client
-
 from pathlib import Path
-import os
-import asyncio
+
+from .mcp import call_mcp_tool
 
 TOOLS = [
     {
@@ -216,33 +214,6 @@ def search_in_repo(repo_dir: Path, query: str, max_results: int = 20, max_chars:
 
     return joined or "<No matches>"
 
-def get_mcp_url() -> str:
-    return os.getenv("MCP_SERVER_URL", "http://mcp-server:9000/mcp/")
-
-def mcp_result_to_str(result) -> str:
-    if result.is_error:
-        return f"MCP tool error: {result}"
-
-    content_parts = []
-    for item in result.content:
-        if hasattr(item, "text"):
-            content_parts.append(item.text)
-        else:
-            content_parts.append(str(item))
-
-    return "\n".join(content_parts)
-
-async def call_mcp_client(tool_name: str, arguments: dict) -> str:
-    client = Client(get_mcp_url())
-    async with client:
-        result = await client.call_tool(tool_name, arguments, timeout=60)
-    return mcp_result_to_str(result)
-
-def call_mcp_tool(tool_name: str, arguments: dict) -> str:
-    try:
-        return asyncio.run(call_mcp_client(tool_name, arguments))
-    except Exception as e:
-        return f"Error calling MCP server: {e}"
 
 def execute_tool(repo_dir: Path, tool_name: str, arguments: dict, max_chars_per_file: int = 15_000) -> str:
     if tool_name == "get_repo_tree":

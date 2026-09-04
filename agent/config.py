@@ -3,8 +3,8 @@ from pathlib import Path
 
 CONFIG_DIR = Path("/workspace/config")
 
-def load_models_config():
-    model_path = CONFIG_DIR / "models.json"
+def load_models_config(config_dir: Path = CONFIG_DIR):
+    model_path = config_dir / "models.json"
     with model_path.open("r", encoding="utf-8") as config_file:
         return json.load(config_file)
 
@@ -18,8 +18,8 @@ def get_model_config(model_alias: str):
         f"Unknown model alias: {model_alias}. Available aliases: {available_aliases}"
     )
 
-def load_limits_config():
-    limits_path = CONFIG_DIR / "limits.json"
+def load_limits_config(config_dir: Path = CONFIG_DIR):
+    limits_path = config_dir / "limits.json"
     if not limits_path.exists():
         return {}
 
