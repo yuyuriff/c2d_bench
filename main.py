@@ -2,26 +2,59 @@ import os
 import argparse
 import subprocess
 
-parser = argparse.ArgumentParser()
+def config_parser():
+    parser = argparse.ArgumentParser()
 
-parser.add_argument("--model", required=True)
-parser.add_argument("--run_id")
-parser.add_argument("--dataset_file", required=True)
-parser.add_argument("--update_repo", action="store_true")
-parser.add_argument("--prompt")
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--run_id", default="001")
+    parser.add_argument("--dataset_file", required=True)
+    parser.add_argument("--update_repo", action="store_true")
+    parser.add_argument("--prompt")
 
-args = parser.parse_args()
+    return parser
 
-env = os.environ.copy()
-env["MODEL_ALIAS"] = args.model 
-env["RUN_ID"] = args.run_id or "run_001"
-env["DATASET_FILE"] = args.dataset_file
-env["UPDATE"] = str(args.update_repo).lower()
-env["PROMPT"] = args.prompt
+def fill_env(env, args):
+    env["MODEL_ALIAS"] = args.model 
+    env["RUN_ID"] = args.run_id
+    env["DATASET_FILE"] = args.dataset_file
+    env["UPDATE"] = str(args.update_repo).lower()
 
-result = subprocess.run(
-    ["docker", "compose", "up", "--build", "--exit-code-from", "evaluator"],
-    env=env,
-)
+def run(cmd, env):
+    result = subprocess.run(cmd, env=env)
+    return result.returncode
 
-raise SystemExit(result.returncode)
+
+def main():
+    parser = config_parser()
+    args = parser.parse_args()
+
+    env = os.environ.copy()
+    fill_env(env, args)
+
+    try:
+        code = run(
+            ["docker", "compose", "up", "-d", "--build", "api-agent", "mcp-server"],
+            env,
+        )
+        if code != 0:
+            return code
+
+        code = run(
+            ["docker", "compose", "run", "--rm", "runner"],
+            env,
+        )
+        if code != 0:
+            return code
+
+        code = run(
+            ["docker", "compose", "run", "--rm", "evaluator"],
+            env,
+        )
+
+        return code
+
+    finally:
+        subprocess.run(
+            ["docker", "compose", "down"],
+            env=env,
+        )

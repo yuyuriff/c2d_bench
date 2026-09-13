@@ -24,7 +24,7 @@ def setup_logging():
     os.makedirs(LOG_DIR, exist_ok=True)
     logging.basicConfig(
         filename=LOG_FILE,
-        filemode="w",
+        filemode="a",
         level=logging.INFO,
     )
     return logging.getLogger("evaluator")

@@ -48,14 +48,14 @@ def get_agent_limits(config: dict | None = None) -> dict:
     return {key: int(value) for key, value in limits.items()}
 
 def get_default_prompt(config_dir: Path = CONFIG_DIR) -> str:
-    prompt_dir = config_dir / "prompts/default.md"
+    prompt_dir = config_dir / "prompts" / "default.md"
     with prompt_dir.open("r", encoding="utf-8") as f:
         return f.read()
 
 
-def load_prompt(prompt_name: str | None, config_dir: Path = CONFIG_DIR) -> str | None:
+def load_prompt(prompt_name: str | None, config_dir: Path = CONFIG_DIR):
     if not prompt_name:
-        return None
+        return get_default_prompt()
     
     prompt_path = config_dir / "prompts" / f"{prompt_name}.md"
 

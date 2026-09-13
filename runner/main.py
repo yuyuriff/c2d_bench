@@ -26,7 +26,7 @@ LOG_FILE = os.path.join(LOG_DIR, f"{RUN_NAME}.log")
 
 UPDATE = os.getenv("UPDATE", "false")
 
-PROMPT = os.getenv("PROMPT")
+PROMPT = os.getenv("PROMPT") or None
 
 def get_update() -> bool:
     return UPDATE.lower() == "true"
