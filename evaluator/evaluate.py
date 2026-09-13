@@ -1,15 +1,23 @@
 import os
 
 from deepeval.metrics import GEval
-from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+from deepeval.test_case import LLMTestCase, SingleTurnParams
 
-JUDGE_API_KEY = os.getenv("JUDGE_API_KEY")
-JUDGE_BASE_URL = os.getenv("JUDGE_BASE_URL")
-JUDGE_MODEL = os.getenv("JUDGE_MODEL")
+def get_judge_config() -> dict[str, str | None]:
+    api_key = os.getenv("JUDGE_API_KEY")
+    base_url = os.getenv("JUDGE_BASE_URL")
+    model = os.getenv("JUDGE_MODEL")
 
-# used by deepeval
-os.environ["OPENAI_API_KEY"] = JUDGE_API_KEY
-os.environ["OPENAI_BASE_URL"] = JUDGE_BASE_URL
+    if api_key:
+        os.environ["OPENAI_API_KEY"] = api_key
+    if base_url:
+        os.environ["OPENAI_BASE_URL"] = base_url
+
+    return {
+        "api_key": api_key,
+        "base_url": base_url,
+        "model": model,
+    }
 
 def build_metrics(model: str | None = None):
     return [
@@ -20,8 +28,8 @@ def build_metrics(model: str | None = None):
                 "Reduce points for misinformation and hallucinations."
             ),
             evaluation_params=[
-                LLMTestCaseParams.ACTUAL_OUTPUT,
-                LLMTestCaseParams.EXPECTED_OUTPUT,
+                SingleTurnParams.ACTUAL_OUTPUT,
+                SingleTurnParams.EXPECTED_OUTPUT,
             ],
             model = model,
         ),
@@ -31,8 +39,8 @@ def build_metrics(model: str | None = None):
                 "Evaluate the coverage of the gold doc, if any entities are missed."
             ),
             evaluation_params=[
-                LLMTestCaseParams.ACTUAL_OUTPUT,
-                LLMTestCaseParams.EXPECTED_OUTPUT,
+                SingleTurnParams.ACTUAL_OUTPUT,
+                SingleTurnParams.EXPECTED_OUTPUT,
             ],
             model = model,
         ),
@@ -43,20 +51,22 @@ def build_metrics(model: str | None = None):
                 "clear, and useful as technical documentation."
             ),
             evaluation_params=[
-                LLMTestCaseParams.ACTUAL_OUTPUT,
+                SingleTurnParams.ACTUAL_OUTPUT,
             ],
             model = model,
         ),
     ]
 
 def evaluate(instance_id: str, gold_doc: str, generated_doc: str) -> dict:
-    if not JUDGE_API_KEY:
+    config = get_judge_config()
+
+    if not config.get("api_key"):
         raise RuntimeError("JUDGE_API_KEY is not set")
 
-    if not JUDGE_BASE_URL:
+    if not config.get("base_url"):
         raise RuntimeError("JUDGE_BASE_URL is not set")
 
-    if not JUDGE_MODEL:
+    if not config.get("model"):
         raise RuntimeError("JUDGE_MODEL is not set")
 
     test_case = LLMTestCase(
@@ -65,7 +75,7 @@ def evaluate(instance_id: str, gold_doc: str, generated_doc: str) -> dict:
         expected_output=gold_doc,
     )
 
-    metrics = build_metrics(JUDGE_MODEL)
+    metrics = build_metrics(config.get("model"))
     
     eval_result = {}
     scores = []

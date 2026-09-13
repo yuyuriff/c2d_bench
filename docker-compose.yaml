@@ -47,6 +47,7 @@ services:
       RUN_ID: ${RUN_ID}
       MODEL_ALIAS: ${MODEL_ALIAS}
       UPDATE: ${UPDATE}
+      PROMPT: ${PROMPT}
     depends_on:
       api-agent:
         condition: service_healthy

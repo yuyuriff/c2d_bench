@@ -5,14 +5,7 @@ import json
 from pathlib import Path
 
 from .tools import TOOLS, execute_tool
-from .config import get_agent_limits
-
-CONFIG_DIR = Path("/workspace/config")
-
-def get_default_prompt(config_dir: Path = CONFIG_DIR) -> str:
-    prompt_dir = config_dir / "prompts/default.md"
-    with prompt_dir.open("r", encoding="utf-8") as f:
-        return f.read()
+from .config import get_agent_limits, get_default_prompt
 
 def get_client(config: dict, model_timeout: int) -> OpenAI:
     api_key = os.environ.get(config["api_key_env"])

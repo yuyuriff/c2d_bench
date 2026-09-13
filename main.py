@@ -8,6 +8,7 @@ parser.add_argument("--model", required=True)
 parser.add_argument("--run_id")
 parser.add_argument("--dataset_file", required=True)
 parser.add_argument("--update_repo", action="store_true")
+parser.add_argument("--prompt")
 
 args = parser.parse_args()
 
@@ -16,6 +17,7 @@ env["MODEL_ALIAS"] = args.model
 env["RUN_ID"] = args.run_id or "run_001"
 env["DATASET_FILE"] = args.dataset_file
 env["UPDATE"] = str(args.update_repo).lower()
+env["PROMPT"] = args.prompt
 
 result = subprocess.run(
     ["docker", "compose", "up", "--build", "--exit-code-from", "evaluator"],

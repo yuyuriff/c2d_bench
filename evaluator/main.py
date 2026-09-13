@@ -3,7 +3,7 @@ import os
 import logging
 from pathlib import Path
 
-from evaluate import evaluate
+from .evaluate import evaluate
 
 DATASET_DIR = "/workspace/benchmark/datasets/"
 DATASET_FILE_ENV = os.getenv("DATASET_FILE", "run_001.jsonl")
@@ -48,8 +48,11 @@ def get_gold_dict(dataset) -> dict[str, str]:
     instances = {}
     for case in dataset:
         instance_id = case.get("instance_id")
-        if instance_id:
-            instances[instance_id] = case.get("gold_md_path")
+        gold_path = case.get("gold_md_path")
+
+        if instance_id and gold_path:
+            instances[instance_id] = gold_path
+
     return instances
 
 def main():
@@ -64,6 +67,7 @@ def main():
     gold_mds = get_gold_dict(dataset)
 
     total_cases = len(dataset)
+    result_cases = len(results)
     success_cases = 0
     error_cases = 0
     evaluated_cases = 0
@@ -76,10 +80,20 @@ def main():
         md_path = case.get("output_md_path")
         gold_path = gold_mds.get(instance_id, "")
 
-        generated_doc = Path(md_path).read_text()
-        gold_doc = Path(gold_path).read_text()
-        output_exists = bool(generated_doc)
-        gold_exists = bool(gold_doc)
+        output_exists = bool(md_path and Path(md_path).is_file())
+        gold_exists = bool(gold_path and Path(gold_path).is_file())
+
+        generated_doc = (
+            Path(md_path).read_text(encoding="utf-8")
+            if output_exists
+            else ""
+        )
+
+        gold_doc = (
+            Path(gold_path).read_text(encoding="utf-8")
+            if gold_exists
+            else ""
+        )
 
         if status == "success":
             success_cases += 1
@@ -118,6 +132,7 @@ def main():
         "run_id": RUN_ID,
         "dataset_file": DATASET_FILE,
         "total_cases": total_cases,
+        "result_cases": result_cases,
         "success_cases": success_cases,
         "error_cases": error_cases,
         "evaluated_cases": evaluated_cases,

@@ -46,3 +46,28 @@ def get_agent_limits(config: dict | None = None) -> dict:
 
     limits = set_limits(limits_config.get("agent"), special_limits)
     return {key: int(value) for key, value in limits.items()}
+
+def get_default_prompt(config_dir: Path = CONFIG_DIR) -> str:
+    prompt_dir = config_dir / "prompts/default.md"
+    with prompt_dir.open("r", encoding="utf-8") as f:
+        return f.read()
+
+
+def load_prompt(prompt_name: str | None, config_dir: Path = CONFIG_DIR) -> str | None:
+    if not prompt_name:
+        return None
+    
+    prompt_path = config_dir / "prompts" / f"{prompt_name}.md"
+
+    if not prompt_path.exists():
+        raise RuntimeError(f"Prompt does not exist: {prompt_path}")
+
+    if not prompt_path.is_file():
+        raise RuntimeError(f"Prompt path is not a file: {prompt_path}")
+
+    prompt_text = prompt_path.read_text(encoding="utf-8").strip()
+
+    if not prompt_text:
+        raise RuntimeError(f"Prompt is empty: {prompt_path}")
+
+    return prompt_text

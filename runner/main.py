@@ -26,6 +26,8 @@ LOG_FILE = os.path.join(LOG_DIR, f"{RUN_NAME}.log")
 
 UPDATE = os.getenv("UPDATE", "false")
 
+PROMPT = os.getenv("PROMPT")
+
 def get_update() -> bool:
     return UPDATE.lower() == "true"
 
@@ -113,6 +115,7 @@ def main():
                     "instance_id": instance_id,
                     "repo_path": repo_path,
                     "llm_model_alias": MODEL_ALIAS,
+                    "prompt": PROMPT,
                 }
                 response = requests.post(AGENT_URL, json=request)
                 if not response.ok:
