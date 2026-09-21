@@ -75,6 +75,10 @@ def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
 
     return str(repo_path)
 
+def checkout_repo(repo_dir: str, repo_tag: str):
+    subprocess.run(["git", "-C", repo_dir, "fetch", "--tags"], check=True)
+    subprocess.run(["git", "-C", repo_dir, "checkout", repo_tag], check=True)
+
 
 def save_to_md(instance_id: str, output_md: str) -> str:
     filename = f"{instance_id}.md"
@@ -113,6 +117,7 @@ def main():
         for case in cases:
             instance_id = case.get("instance_id", "unknown")
             repo_url = case.get("repo_url")
+            repo_tag = case.get("repo_tag")
             start_case = perf_counter()
 
             logger.info("Processing instance: %s", instance_id)
@@ -122,6 +127,9 @@ def main():
                     raise RuntimeError(f"Repo url is missing in case {instance_id}")
 
                 repo_path = clone_repo(instance_id=instance_id, repo_url=repo_url, update=get_update())
+                if (repo_tag):
+                    checkout_repo(repo_path, repo_tag)
+
                 request = {
                     "instance_id": instance_id,
                     "repo_path": repo_path,
