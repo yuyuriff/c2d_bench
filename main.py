@@ -20,7 +20,10 @@ def fill_env(env, args):
     env["UPDATE"] = str(args.update_repo).lower()
 
 def run(cmd, env):
+    print("$", " ".join(cmd))
     result = subprocess.run(cmd, env=env)
+
+    print(f"Exit code: {result.returncode}")
     return result.returncode
 
 
@@ -47,14 +50,21 @@ def main():
             return code
 
         code = run(
-            ["docker", "compose", "run", "--rm", "evaluator"],
+            ["docker", "compose", "run", "--rm", "--no-deps", "evaluator"],
             env,
         )
 
         return code
+
+    except Exception as e:
+        print(f"Launcher error: {e}")
+        return 1
 
     finally:
         subprocess.run(
             ["docker", "compose", "down"],
             env=env,
         )
+
+if __name__ == "__main__":
+    raise SystemExit(main())

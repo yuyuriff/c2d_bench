@@ -2,6 +2,7 @@ import json
 import os
 import logging
 from pathlib import Path
+from time import perf_counter
 
 from .evaluate import evaluate
 
@@ -26,7 +27,12 @@ def setup_logging():
         filename=LOG_FILE,
         filemode="a",
         level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        force=True,
     )
+    logging.getLogger("httpx2").setLevel(logging.WARNING)
+
     return logging.getLogger("evaluator")
 
 logger = setup_logging()
@@ -74,6 +80,8 @@ def main():
 
     details = []
 
+    start_run = perf_counter()
+
     for case in results:
         instance_id = case.get("instance_id", "unknown")
         status = case.get("status")
@@ -113,20 +121,28 @@ def main():
         if status == "success" and output_exists and gold_exists:
             try:
                 logger.info("Evaluating instance: %s", instance_id)
+                start_case = perf_counter()
+
                 eval_result = evaluate(
                     instance_id=instance_id,
                     gold_doc=gold_doc,
                     generated_doc=generated_doc,
                 )
 
+                time_case = perf_counter() - start_case
                 evaluated_cases += 1
                 detail["judge"] = eval_result
+                detail["eval_time_sec"] = time_case
+
+                logger.info("Finished evaluating: %s in  %.2f sec", instance_id, time_case)
 
             except Exception as e:
                 detail["judge_error"] = str(e)
                 logger.exception("Evaluation error on case %s", instance_id)
 
         details.append(detail)
+
+    time_run = perf_counter() - start_run
 
     report = {
         "run_id": RUN_ID,
@@ -137,6 +153,7 @@ def main():
         "error_cases": error_cases,
         "evaluated_cases": evaluated_cases,
         "details": details,
+        "run_time_sec" : time_run,
     }
     with open(REPORT_FILE, "w", encoding="utf-8") as report_file:
         json.dump(report, report_file, indent=2)

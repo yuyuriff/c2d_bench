@@ -70,6 +70,16 @@ def call_llm(repo_dir: Path, config: dict, prompt: str | None = None, instance_i
 
         message = response.choices[0].message
         if not getattr(message, "tool_calls", None):
+            if tool_calls_used == 0:
+                messages.append({
+                    "role": "user",
+                    "content": (
+                        "Repository inspection is required before the final answer. "
+                        "Call repository tools first."
+                    ),
+                })
+                continue
+
             stats["tool_calls_used"] = tool_calls_used
             stats["tool_calls_failed"] = tool_calls_failed
             stats["tool_calls_stats"] = tool_calls_stats

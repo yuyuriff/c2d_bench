@@ -92,6 +92,6 @@ def evaluate(instance_id: str, gold_doc: str, generated_doc: str) -> dict:
     avg = sum(scores) / len(scores) if scores else 0.0
 
     return {
-        "avg_score": avg,
+        "avg_score": round(avg, 3),
         "metrics": eval_result,
     }

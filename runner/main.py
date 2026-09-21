@@ -4,6 +4,7 @@ import subprocess
 from pathlib import Path
 import shutil
 import logging
+from time import perf_counter
 
 import requests
 
@@ -37,11 +38,14 @@ def setup_logging():
         filename=LOG_FILE,
         filemode="w",
         level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
         force=True,
     )
     return logging.getLogger("runner")
 
 logger = setup_logging()
+
 
 def load_dataset(path: Path):
     cases = []
@@ -53,6 +57,7 @@ def load_dataset(path: Path):
             cases.append(json.loads(line))
 
     return cases
+
 
 def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
     os.makedirs(REPOS_DIR, exist_ok=True)
@@ -70,6 +75,7 @@ def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
 
     return str(repo_path)
 
+
 def save_to_md(instance_id: str, output_md: str) -> str:
     filename = f"{instance_id}.md"
     path = os.path.join(OUTPUT_DIR, filename)
@@ -79,11 +85,13 @@ def save_to_md(instance_id: str, output_md: str) -> str:
 
     return path
 
+
 def log_tool_stats(instance_id: str, stats : dict):
     calls = stats.pop("tool_calls", [])
     logger.info("Tool call stats for instance %s: %s", instance_id, json.dumps(stats))
     for call in calls:
         logger.info("Tool call: %s", json.dumps(call))
+
 
 def main():
     logger.info(
@@ -99,10 +107,13 @@ def main():
     logger.info("Loaded %s cases", len(cases))
     logger.info("Using %s model", MODEL_ALIAS)
 
+    start_run = perf_counter()
+
     with open(RESULTS_FILE, "w", encoding="utf-8") as results_file:
         for case in cases:
             instance_id = case.get("instance_id", "unknown")
             repo_url = case.get("repo_url")
+            start_case = perf_counter()
 
             logger.info("Processing instance: %s", instance_id)
 
@@ -135,7 +146,9 @@ def main():
                     "status": "success",
                 }
                 results_file.write(json.dumps(case_result) + "\n")
-                logger.info("Instance processed: %s", instance_id)
+                time_case = perf_counter() - start_case
+
+                logger.info("Instance processed: %s in %.2f sec", instance_id, time_case)
 
             except Exception as e:
                 logger.exception("Instance failed: %s", instance_id)
@@ -146,7 +159,8 @@ def main():
                 }
                 results_file.write(json.dumps(error_record) + "\n")
 
-    logger.info("Benchmark run finished. Results: %s", RESULTS_FILE)
+    time_run = perf_counter() - start_run
+    logger.info("Benchmark run finished in %.2f secs. Results: %s", time_run, RESULTS_FILE)
 
 
 if __name__ == "__main__":

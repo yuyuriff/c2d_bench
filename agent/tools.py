@@ -1,6 +1,17 @@
+import os
 from pathlib import Path
 
 from .mcp import call_mcp_tool
+
+SKIP_DIRS = {
+    ".git",
+    "node_modules",
+    "target",
+    "build",
+    "dist",
+    "docs",
+}
+
 
 TOOLS = [
     {
@@ -121,6 +132,7 @@ TOOLS = [
                         "description": "Relative path of a graph file"
                     },
                 },
+                "required": ["path"],
             }
         }
     },
@@ -145,17 +157,50 @@ def resolve_rel_path(repo_dir: Path, rel_path: str) -> Path:
 
     return repo_path
 
+def walk_repo(repo_dir: Path):
+    for root, dirs, files in os.walk(repo_dir):
+        dirs[:] = [
+            d
+            for d in dirs
+            if d not in SKIP_DIRS
+        ]
+
+        root_path = Path(root)
+
+        for d in dirs:
+            yield root_path / d
+
+        for f in files:
+            yield root_path / f
+
+
+def walk_files(repo_dir: Path):
+    for root, dirs, files in os.walk(repo_dir):
+        dirs[:] = [
+            d
+            for d in dirs
+            if d not in SKIP_DIRS
+        ]
+
+        root_path = Path(root)
+
+        for f in files:
+            yield root_path / f
+
+
 def get_repo_tree(repo_dir: Path, max_nodes: int = 100) -> str:
     nodes = []
 
-    for path in repo_dir.rglob("*"):
+    for path in walk_repo(repo_dir):
         rel_path = str(path.relative_to(repo_dir)).replace("\\", "/")
         rel_path += "/" if path.is_dir() else ""
 
         nodes.append(rel_path)
 
-    nodes = sorted(nodes)[:max_nodes]
-    return "\n".join(nodes)
+        if len(nodes) >= max_nodes:
+            break
+
+    return "\n".join(sorted(nodes))
 
 
 def read_repo_file(repo_dir: Path, rel_path: str, max_chars: int = 15_000) -> str:
@@ -185,11 +230,9 @@ def search_in_repo(repo_dir: Path, query: str, max_results: int = 20, max_chars:
     query_lower = query.lower()
     matches = []
 
-    for path in repo_dir.rglob("*"):
-        if not path.is_file():
-            continue
-
+    for path in walk_files(repo_dir):
         rel_path = str(path.relative_to(repo_dir)).replace("\\", "/")
+
         try:
             text = path.read_text(encoding="utf-8", errors="ignore")
         except Exception:
@@ -215,37 +258,90 @@ def search_in_repo(repo_dir: Path, query: str, max_results: int = 20, max_chars:
     return joined or "<No matches>"
 
 
-def execute_tool(repo_dir: Path, tool_name: str, arguments: dict, max_chars_per_file: int = 15_000) -> str:
-    if tool_name == "get_repo_tree":
-        return get_repo_tree(repo_dir)
+# tool handling
 
-    if tool_name == "read_repo_file":
-        path = arguments.get("path", "")
-        return read_repo_file(repo_dir, path, max_chars=max_chars_per_file)
+def handle_get_repo_tree(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return get_repo_tree(repo_dir)
 
-    if tool_name == "search_text":
-        query = arguments.get("query", "")
-        return search_in_repo(repo_dir, query)
 
-    if tool_name == "list_mcp_files":
-        return call_mcp_tool("list_mcp_files", {})
+def handle_read_repo_file(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return read_repo_file(
+        repo_dir,
+        arguments.get("path", ""),
+        max_chars=max_chars_per_file,
+    )
 
-    if tool_name == "read_mcp_file":
-        path = arguments.get("path", "")
-        return call_mcp_tool("read_mcp_file", {"path": path})
 
-    if tool_name == "search_mcp":
-        query = arguments.get("query", "")
-        return call_mcp_tool("search_mcp", {"query": query})
+def handle_search_text(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return search_in_repo(
+        repo_dir,
+        arguments.get("query", ""),
+    )
 
-    if tool_name == "list_documentation_graphs":
-        return call_mcp_tool("list_documentation_graphs", {})
 
-    if tool_name == "read_documentation_graph":
-        return call_mcp_tool("read_documentation_graph", {
+def handle_list_mcp_files(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return call_mcp_tool(
+        "list_mcp_files",
+        {},
+    )
+
+
+def handle_read_mcp_file(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return call_mcp_tool(
+        "read_mcp_file",
+        {
+            "path": arguments.get("path", ""),
+        },
+    )
+
+
+def handle_search_mcp(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return call_mcp_tool(
+        "search_mcp",
+        {
+            "query": arguments.get("query", ""),
+        },
+    )
+
+
+def handle_list_documentation_graphs(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return call_mcp_tool(
+        "list_documentation_graphs",
+        {},
+    )
+
+
+def handle_read_documentation_graph(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
+    return call_mcp_tool(
+        "read_documentation_graph",
+        {
             "project": arguments.get("project", ""),
             "path": arguments.get("path", ""),
-        })
+        },
+    )
 
-    return f"Unavailable tool: {tool_name}"
+
+TOOL_HANDLERS = {
+    "get_repo_tree": handle_get_repo_tree,
+    "read_repo_file": handle_read_repo_file,
+    "search_text": handle_search_text,
+    "list_mcp_files": handle_list_mcp_files,
+    "read_mcp_file": handle_read_mcp_file,
+    "search_mcp": handle_search_mcp,
+    "list_documentation_graphs": handle_list_documentation_graphs,
+    "read_documentation_graph": handle_read_documentation_graph,
+}
+
+
+def execute_tool(repo_dir: Path, tool_name: str, arguments: dict, max_chars_per_file: int = 15_000) -> str:
+    handler = TOOL_HANDLERS.get(tool_name)
+
+    if handler is None:
+        return f"Unavailable tool: {tool_name}"
+
+    return handler(
+        repo_dir,
+        arguments,
+        max_chars_per_file,
+    )
     

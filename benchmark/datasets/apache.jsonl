@@ -1,0 +1,5 @@
+{"instance_id":"bookkeeper","repo_url":"https://github.com/apache/bookkeeper.git","gold_md_path":"/workspace/benchmark/gold/bookkeeper.md"}
+{"instance_id":"rocketmq","repo_url":"https://github.com/apache/rocketmq.git","gold_md_path":"/workspace/benchmark/gold/rocketmq.md"}
+{"instance_id":"kafka","repo_url":"https://github.com/apache/kafka.git","gold_md_path":"/workspace/benchmark/gold/kafka.md"}
+{"instance_id":"opennlp","repo_url":"https://github.com/apache/opennlp.git","gold_md_path":"/workspace/benchmark/gold/opennlp.md"}
+{"instance_id":"zookeeper","repo_url":"https://github.com/apache/zookeeper.git","gold_md_path":"/workspace/benchmark/gold/zookeeper.md"}
