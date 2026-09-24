@@ -76,7 +76,7 @@ def clone_repo(instance_id: str, repo_url: str, update: bool = False) -> str:
     return str(repo_path)
 
 def checkout_repo(repo_dir: str, repo_tag: str):
-    subprocess.run(["git", "-C", repo_dir, "fetch", "--tags"], check=True)
+    subprocess.run(["git", "-C", repo_dir, "fetch", "--tags", "--force"], check=True)
     subprocess.run(["git", "-C", repo_dir, "checkout", repo_tag], check=True)
 
 

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import subprocess
 
 from .mcp import call_mcp_tool
 
@@ -223,39 +224,80 @@ def find_snippet(text: str, query: str) -> str:
 
     return snippet
 
-def search_in_repo(repo_dir: Path, query: str, max_results: int = 20, max_chars: int = 15_000) -> str:
+def limit_matches(matches: str, max_results: int = 20, max_per_file: int = 3) -> str:
+    counts = {}
+    selected = []
+
+    snippets = matches.split("\n--\n")
+
+    for snippet in snippets:
+        lines = snippet.splitlines()
+        file_path = ""
+        path_count = 0
+
+        for line in lines:
+            parts = line.split(":", 2)
+            if len(parts) == 3 and parts[1].isdigit():
+                file_path = parts[0]
+                path_count = counts.get(file_path, 0)
+                break
+
+        if not file_path:
+            continue
+        
+        if path_count >= max_per_file:
+            continue
+
+        selected.append("\n".join(lines))
+        counts[file_path] = path_count + 1
+
+        if len(selected) >= max_results:
+            break
+
+    return "\n\n".join(selected)
+
+
+def search_in_repo(repo_dir: Path, query: str, max_results: int = 30, max_matches_per_file: int = 3, max_chars: int = 15_000) -> str:
     if not query:
         return "<No matches>"
 
-    query_lower = query.lower()
-    matches = []
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "--no-pager",
+                "-C",
+                str(repo_dir),
+                "grep",
+                "-n",
+                "-i",
+                "-B",
+                "2",
+                "-A",
+                "2",
+                query,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except Exception as e:
+        return f"<Search error: {e}>"
 
-    for path in walk_files(repo_dir):
-        rel_path = str(path.relative_to(repo_dir)).replace("\\", "/")
+    if result.returncode > 1:
+        return f"<Search error: {result.stderr.strip()}>"
 
-        try:
-            text = path.read_text(encoding="utf-8", errors="ignore")
-        except Exception:
-            continue
+    lines = result.stdout.splitlines()[:max_results]
 
-        snippet = ""
-        if query_lower in text.lower():
-            snippet = find_snippet(text, query)
-        elif query_lower in rel_path.lower():
-            snippet = text[:1_000]
-        else:
-            continue
+    if not lines:
+        return "<No matches>"
+    
+    output = limit_matches(result.stdout)
 
-        matches.append(f"{rel_path}: {snippet}")
+    if len(output) > max_chars:
+        output = output[:max_chars] + "\n<...>"
 
-        if len(matches) >= max_results:
-            break
-
-    joined = "\n".join(matches)
-    if len(joined) > max_chars:
-        joined = joined[:max_chars] + "\n<...>"
-
-    return joined or "<No matches>"
+    return output
 
 
 # tool handling
@@ -274,8 +316,9 @@ def handle_read_repo_file(repo_dir: Path, arguments: dict, max_chars_per_file: i
 
 def handle_search_text(repo_dir: Path, arguments: dict, max_chars_per_file: int) -> str:
     return search_in_repo(
-        repo_dir,
-        arguments.get("query", ""),
+        repo_dir=repo_dir,
+        query=arguments.get("query", ""),
+        max_chars=max_chars_per_file,
     )
 
 
